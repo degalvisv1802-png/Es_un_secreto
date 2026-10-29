@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>¡Feliz Cumpleaños Mamá! - Regalo Sorpresa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            script: ['"Great Vibes"', 'cursive']
+          },
+          colors: {
+            night: {
+              950: '#020b18',
+              900: '#041329',
+              850: '#081b38',
+              800: '#0b2545',
+              750: '#0d1f3c',
+              700: '#132a4f',
+              600: '#1c3a6b'
+            },
+            caribbean: {
+              50: '#ecfeff',
+              100: '#cffafe',
+              300: '#67e8f9',
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#028090',
+              700: '#05668d',
+              900: '#083344'
+            },
+            gold: {
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+              700: '#a16207'
+            }
+          },
+          boxShadow: {
+            'glow-gold': '0 0 30px -5px rgba(245, 158, 11, 0.45)',
+            'glow-cyan': '0 0 30px -5px rgba(6, 182, 212, 0.45)',
+            'glow-cyan-lg': '0 0 45px -8px rgba(34, 211, 238, 0.35)',
+            'ticket': '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px -6px rgba(245, 158, 11, 0.25)'
+          },
+          animation: {
+            'bounce-gentle': 'bounce 2.5s infinite',
+            'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+            'float-slow': 'float 4s ease-in-out infinite',
+            'shimmer': 'shimmer 2.5s linear infinite'
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' },
+              '50%': { transform: 'scale(1.03)', boxShadow: '0 0 35px rgba(245, 158, 11, 0.75)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' }
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .bg-dark-mesh {
+      background-color: #041329;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.18) 0%, transparent 35%),
+        radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 65%, rgba(14, 165, 233, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 90%, rgba(251, 191, 36, 0.12) 0%, transparent 40%);
+    }
+    .ticket-edge-left, .ticket-edge-right {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: #081b38;
+      border-radius: 9999px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+    }
+    .ticket-edge-left { left: -13px; }
+    .ticket-edge-right { right: -13px; }
+    .confetti-piece {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .balloon-item {
+      position: fixed;
+      bottom: -100px;
+      pointer-events: none;
+      z-index: 9998;
+      animation: flyBalloon 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    @keyframes flyBalloon {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+    }
+    @keyframes revealFadeDown {
+      0% { opacity: 0; transform: translateY(28px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-reveal-flow {
+      animation: revealFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="bg-night-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200">
+<!-- Floating Confetti & Canvas Container -->
+<div class="fixed inset-0 pointer-events-none z-50 overflow-hidden" id="celebrationOverlay"></div>
+<!-- Main Container Mobile First Max-W-MD with Deep Midnight Tone -->
+<div class="max-w-md mx-auto min-h-screen flex flex-col bg-dark-mesh shadow-2xl relative overflow-x-hidden border-x border-cyan-900/40">
+<!-- Top Caribbean Festive Bar -->
+<header class="pt-6 pb-2 px-6 text-center relative z-10">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-night-800/90 border border-amber-400/40 shadow-glow-gold/30 text-xs font-bold text-amber-300 tracking-wide uppercase backdrop-blur-md">
+<span class="inline-block animate-spin text-amber-300" style="animation-duration: 4s;">✨</span>
+        Día Especial de Celebración
+        <span class="">🎈</span>
+</div>
+</header>
+<!-- 1. Hero / Encabezado de Cumpleaños -->
+<section class="px-6 pt-4 pb-8 text-center relative z-10 flex-1 flex flex-col justify-center min-h-[75vh]" id="heroHeaderSection">
+<!-- Decorative Floating Emojis -->
+<div class="flex justify-center items-center gap-3 mb-3">
+<span class="text-3xl animate-float-slow drop-shadow-[0_0_12px_rgba(34,211,238,0.4)]" style="animation-delay: 0s;">🌴</span>
+<span class="text-4xl animate-bounce-gentle drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">🎂</span>
+<span class="text-3xl animate-float-slow drop-shadow-[0_0_12px_rgba(244,63,94,0.4)]" style="animation-delay: 1.5s;">🌺</span>
+</div>
+<h1 class="text-3xl font-extrabold font-serif text-slate-50 tracking-tight leading-tight mb-3">
+        ¡FELIZ CUMPLEAÑOS, <br/>
+<span class="bg-gradient-to-r from-cyan-300 via-caribbean-400 to-amber-300 bg-clip-text text-transparent drop-shadow-sm">MAMÁ!</span> 🎉❤️
+      </h1>
+<p class="text-sm font-script text-2xl text-cyan-300 mb-2 leading-none drop-shadow">
+        Para la persona más maravillosa del mundo
+      </p>
+<p class="text-slate-300 text-sm leading-relaxed px-2 font-normal mb-6">
+        Hoy celebramos tu vida, tu sonrisa y todo el amor que nos das cada día... y tenemos un regalo muy especial preparado para ti.
+      </p>
+<!-- Botón de Revelación Principal -->
+<div class="relative py-2">
+<button class="w-full relative group overflow-hidden rounded-2xl p-[1.5px] bg-gradient-to-r from-amber-400 via-rose-500 to-cyan-400 shadow-glow-gold hover:shadow-glow-cyan active:scale-95 transition-all duration-300 animate-pulse-glow" id="openGiftBtn" onclick="revealSurprise()">
+<div class="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 rounded-2xl py-4 px-6 text-white font-bold flex items-center justify-center gap-3 group-hover:from-amber-400 group-hover:to-orange-500 transition-all shadow-inner">
+<span class="text-2xl filter drop-shadow animate-bounce">🎁</span>
+<span class="text-base tracking-wide font-extrabold uppercase drop-shadow-md">Abrir Regalo de Cumpleaños</span>
+<span class="text-xl">✨</span>
+</div>
+</button>
+<p class="text-[11px] text-amber-300/80 font-medium mt-2 flex items-center justify-center gap-1" id="tapNotice">
+<span class="">👆</span> Toca aquí para descubrir tu sorpresa
+        </p>
+</div>
+</section>
+<!-- CONTENEDOR TOTAL DE LA SORPRESA (OCULTO AL INICIO) -->
+<div class="hidden" id="fullSurpriseContent">
+<!-- 2. Revelación de la Sorpresa -->
+<section class="px-5 pb-8 relative z-20" id="surpriseSection">
+<!-- Announcement Banner -->
+<div class="rounded-3xl p-0.5 bg-gradient-to-b from-amber-400 via-cyan-400 to-caribbean-600 shadow-glow-cyan-lg mb-6">
+<div class="bg-night-850 rounded-[22px] overflow-hidden border border-cyan-500/20">
+<!-- Paradise Island Image Header -->
+<div class="relative h-56 w-full overflow-hidden bg-night-950">
+<img alt="Isla de San Andrés" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AEtjO1VTCdkITPJoThTp13bABoOVA_tFotqqD_ffwnPwo2fUyaC6yGQ8yBok4JnRL-iWi05HGT-Khhbm-uc7zvL-YdaI7L8KCIU6eyKq_eXbjURUMyyMK3jkIIrQ8lwlD_Wf_BIj2BmFUELUTFOq5TRTGvP92Fs3pSfLAqflq7ow51QeQHBEmNpWwsrR6LRvxgCtpGe4aUMQ7dLz6JVy-PpJFB2aV46T2GWFPzBFcnTL0nkosg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/40 to-transparent"></div>
+<!-- Floating Badge on Image -->
+<div class="absolute top-3 right-3 bg-amber-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 uppercase tracking-wider">
+<span class="">✈️</span> ¡Destino Soñado!
+            </div>
+<div class="absolute bottom-3 left-4 right-4 text-white">
+<span class="text-amber-300 text-xs font-bold uppercase tracking-widest block mb-1">Sorpresa Revelada</span>
+<h2 class="text-xl font-serif font-black leading-tight text-white drop-shadow-md">
+                ¡NUESTRO REGALO ES UN VIAJE A SAN ANDRÉS! 🏝️✈️☀️
+              </h2>
+</div>
+</div>
+<!-- Emotional Message Card -->
+<div class="p-6 bg-gradient-to-b from-night-850 to-night-900 border-t border-cyan-900/50"><div class="flex items-center justify-between mb-4"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 text-sm shadow-sm">❤️</div><span class="text-xs uppercase font-extrabold tracking-wider text-rose-400">Nuestras Cartas de Amor</span></div><span class="text-[11px] text-amber-300/80 font-mono tracking-wide">De nosotros para ti ✨</span></div><div class="space-y-3.5"><div class="bg-night-950/80 rounded-2xl p-4 border border-cyan-500/30 relative overflow-hidden"><div class="flex items-center gap-2.5 mb-2"><span class="text-lg">👨‍💼</span><h4 class="text-xs font-bold text-cyan-300 uppercase tracking-wide">De Papá con todo mi amor 💙</h4></div><p class="text-slate-200 text-xs leading-relaxed italic font-serif pl-1 border-l-2 border-cyan-400/50">"Para la amiga, mujer, esposa, mamá que siempre encuentra las cosas, es momento de seguir encontrándonos como en familia, por eso decidimos darte este regalo al lado de las dos personas que más te aman."</p></div><div class="bg-night-950/80 rounded-2xl p-4 border border-amber-500/30 relative overflow-hidden"><div class="flex items-center gap-2.5 mb-2"><span class="text-lg">👦</span><h4 class="text-xs font-bold text-amber-300 uppercase tracking-wide">De tu Hijo con todo mi corazón 💛</h4></div><p class="text-slate-200 text-xs leading-relaxed italic font-serif pl-1 border-l-2 border-amber-400/50">"Mami gracias por siempre amarme y ser mi amiga y psicóloga personal, gracias por darme tanto amor te amo siempre y siempre lo haré este regalo lo pasaremos juntos sin peleas y amándonos mucho ❤️"</p></div></div><div class="flex items-center justify-between pt-3 mt-3 border-t border-slate-700/60 text-xs font-bold text-slate-200"><span class="text-cyan-300">Te amamos infinitamente:</span><span class="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2.5 py-1 rounded-lg">Papá e Hijo ❤️</span></div></div>
+</div>
+</div>
+<!-- Quick Audio/Party Trigger Mini Bar -->
+<div class="flex items-center justify-between bg-night-800/90 backdrop-blur-md border border-cyan-500/30 rounded-2xl p-3 shadow-lg mb-6">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 text-lg shadow-sm">
+            🥂
+          </div>
+<div>
+<h4 class="text-xs font-bold text-slate-100">¡Brindis por Mamá!</h4>
+<p class="text-[11px] text-slate-400">Haz estallar más confeti festivo</p>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-caribbean-600 hover:from-cyan-500 hover:to-caribbean-500 active:scale-95 text-white text-xs font-bold transition-all shadow-glow-cyan/50 flex items-center gap-1" onclick="launchCelebrationEffects(25)">
+<span class="">🎊</span> ¡Festejar!
+        </button>
+</div>
+</section>
+<!-- 3. Sección "Lo que vamos a disfrutar en familia" -->
+<section class="px-5 pb-8 relative z-10">
+<div class="text-center mb-6">
+<span class="text-[11px] font-bold text-cyan-300 uppercase tracking-widest bg-cyan-950/80 border border-cyan-500/40 px-3.5 py-1 rounded-full shadow-sm">
+          Itinerario Mágico
+        </span>
+<h3 class="text-2xl font-serif font-black text-white mt-2.5 drop-shadow-sm">
+          Lo que vamos a disfrutar juntos 🌊🌴
+        </h3>
+<p class="text-xs text-slate-400 mt-1">
+          Cada momento pensado exclusivamente para consentirte
+        </p>
+</div>
+<!-- Grid of Interactive Feature Cards -->
+<div class="grid grid-cols-1 gap-3.5">
+<!-- Card 1: Mar de 7 Colores -->
+<div class="group bg-night-800/90 backdrop-blur-md rounded-2xl p-4 border border-cyan-500/25 shadow-lg hover:shadow-cyan-500/10 hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-caribbean-600 text-white flex items-center justify-center text-2xl shadow-glow-cyan shrink-0">
+              🌊
+            </div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  El Mar de los 7 Colores
+                </h4>
+<span class="text-[10px] font-extrabold text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded-full border border-cyan-500/40">Relax Total</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">
+                Descanso pleno bajo el sol caribeño, brisa suave, agua cristalina y paz absoluta en la playa para la reina de la casa.
+              </p>
+</div>
+</div>
+</div>
+<!-- Card 2: Johnny Cay & Haynes Cay -->
+<div class="group bg-night-800/90 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/25 shadow-lg hover:shadow-emerald-500/10 hover:border-emerald-400/50 transition-all duration-300 relative overflow-hidden">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center text-2xl shadow-sm shrink-0">
+              🐠
+            </div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  Johnny Cay &amp; Haynes Cay
+                </h4>
+<span class="text-[10px] font-extrabold text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-500/40">Aventura</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">
+                Paseo en lancha inolvidable, música reggae caribeña, palmeras paradisíacas y snorkel con pececitos de colores.
+              </p>
+</div>
+</div>
+</div>
+<!-- Card 3: Gastronomía & Brindis -->
+<div class="group bg-night-800/90 backdrop-blur-md rounded-2xl p-4 border border-amber-500/25 shadow-lg hover:shadow-amber-500/10 hover:border-amber-400/50 transition-all duration-300 relative overflow-hidden">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center text-2xl shadow-glow-gold shrink-0">
+              🥥
+            </div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
+                  Gastronomía y Brindis Caribeño
+                </h4>
+<span class="text-[10px] font-extrabold text-amber-300 bg-amber-950 px-2 py-0.5 rounded-full border border-amber-500/40">Sabor &amp; Fiesta</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">
+                Cena especial de gala por su cumpleaños con mariscos frescos, frutas tropicales y cocos locos con sombrillita frente al mar.
+              </p>
+</div>
+</div>
+</div>
+<!-- Card 4: Atardeceres Inolvidables -->
+<div class="group bg-night-800/90 backdrop-blur-md rounded-2xl p-4 border border-rose-500/25 shadow-lg hover:shadow-rose-500/10 hover:border-rose-400/50 transition-all duration-300 relative overflow-hidden">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-400 to-indigo-500 text-white flex items-center justify-center text-2xl shadow-sm shrink-0">
+              🌅
+            </div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="text-sm font-bold text-white group-hover:text-rose-300 transition-colors">
+                  Atardeceres Inolvidables
+                </h4>
+<span class="text-[10px] font-extrabold text-rose-300 bg-rose-950 px-2 py-0.5 rounded-full border border-rose-500/40">Momentos Top</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">
+                Caminatas mágicas tomados de la mano por el malecón y la playa, tomándonos fotos familiares que guardaremos para siempre.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Sección de Ticket de Vuelo Sorpresa (Pase de Abordaje VIP Dorado & Noche Caribeña) -->
+<section class="px-5 pb-8 relative z-10">
+<div class="text-center mb-4">
+<span class="text-[11px] font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3.5 py-1 rounded-full border border-amber-400/40 shadow-sm">
+          🎫 Tu Pase de Abordaje Oficial
+        </span>
+<h3 class="text-xl font-serif font-black text-white mt-2.5">
+          Ticket Dorado de Vuelo Sorpresa
+        </h3>
+</div>
+<!-- Boarding Pass Ticket Container with Glowing Gold Edges -->
+<div class="relative bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 p-[1.5px] rounded-3xl shadow-ticket">
+<div class="bg-night-950 text-white rounded-[22px] overflow-hidden relative">
+<!-- Ticket Header -->
+<div class="bg-gradient-to-r from-caribbean-900 via-night-800 to-caribbean-900 px-5 py-3.5 flex items-center justify-between border-b border-amber-500/30">
+<div class="flex items-center gap-2">
+<span class="text-lg">✈️</span>
+<span class="text-xs font-black tracking-widest uppercase text-cyan-200 font-mono">CARIBBEAN AIRLINES VIP</span>
+</div>
+<span class="text-[10px] font-bold px-2 py-0.5 bg-amber-400 text-slate-950 rounded uppercase tracking-wider font-mono shadow-sm">
+              BOARDING PASS
+            </span>
+</div>
+<!-- Flight Route Banner -->
+<div class="px-5 pt-5 pb-4 bg-night-900/95 border-b border-dashed border-slate-700 relative">
+<!-- Cutout Circles for ticket feel -->
+<div class="ticket-edge-left"></div>
+<div class="ticket-edge-right"></div>
+<div class="flex items-center justify-between text-center">
+<div>
+<span class="text-[10px] text-slate-400 font-mono block">ORIGEN</span>
+<span class="text-2xl font-black font-mono text-white tracking-wider">HOGAR</span>
+<span class="text-[11px] text-amber-300 font-medium block">Familia Unida</span>
+</div>
+<div class="flex flex-col items-center px-3">
+<span class="text-xs text-cyan-300 font-mono tracking-widest font-semibold">VUELO DIRECTO</span>
+<div class="flex items-center gap-1 my-1">
+<div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+<div class="w-16 h-0.5 bg-gradient-to-r from-cyan-400 to-amber-400"></div>
+<span class="text-amber-400 text-sm filter drop-shadow">✈️</span>
+</div>
+<span class="text-[10px] text-slate-400 font-mono">CLASE AMOR INFINITO</span>
+</div>
+<div>
+<span class="text-[10px] text-slate-400 font-mono block">DESTINO</span>
+<span class="text-2xl font-black font-mono text-amber-400 tracking-wider">ADZ</span>
+<span class="text-[11px] text-cyan-300 font-medium block">San Andrés</span>
+</div>
+</div>
+</div>
+<!-- Ticket Details Body -->
+<div class="p-5 space-y-3.5 bg-night-950 text-xs">
+<div class="grid grid-cols-2 gap-3 bg-night-900/90 p-3 rounded-xl border border-slate-800">
+<div>
+<span class="text-[10px] text-slate-400 uppercase font-mono block">Motivo del Viaje</span>
+<p class="font-bold text-amber-300 text-xs mt-0.5">¡Viaje Especial de Cumpleaños! 🥳</p>
+</div>
+<div>
+<span class="text-[10px] text-slate-400 uppercase font-mono block">Destino</span>
+<p class="font-bold text-cyan-200 text-xs mt-0.5">Isla de San Andrés 🏝️</p>
+</div>
+</div>
+<!-- Pasajeros -->
+<div class="bg-night-900/90 p-3 rounded-xl border border-slate-800">
+<span class="text-[10px] text-slate-400 uppercase font-mono block mb-1">Pasajeros Confirmados</span>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-1 rounded-md font-bold text-xs">
+                  👑 La Cumpleañera (Mamá)
+                </span>
+<span class="inline-flex items-center gap-1 bg-slate-800/80 text-slate-200 border border-slate-700/60 px-2 py-1 rounded-md text-xs">
+                  👨 Papá
+                </span>
+<span class="inline-flex items-center gap-1 bg-slate-800/80 text-slate-200 border border-slate-700/60 px-2 py-1 rounded-md text-xs">
+                  👦 Hijo
+                </span>
+</div>
+</div>
+<!-- Incluye -->
+<div class="bg-gradient-to-r from-night-900 to-caribbean-950/70 p-3 rounded-xl border border-cyan-900/70">
+<span class="text-[10px] text-cyan-300 uppercase font-mono block mb-1">Paquete Incluye:</span>
+<p class="text-slate-200 leading-relaxed text-[11.5px]">
+                ☀️ Sol caribeño, playa de 7 colores, relajación total, abrazos infinitos y recuerdos inolvidables en familia.
+              </p>
+</div>
+<!-- Barcode & Stamp Simulation -->
+<div class="pt-2 flex items-center justify-between border-t border-slate-800 font-mono text-[10px] text-slate-500">
+<div>
+<div class="tracking-[4px] text-white/70 font-mono text-xs">||| | | |||| | ||| |||| |</div>
+<span class="text-slate-400">TICKET-MOM-BDAY-2025</span>
+</div>
+<div class="text-right">
+<span class="px-2 py-1 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 text-[9px] uppercase tracking-wider">
+                  ✓ EMITIDO CON AMOR
+                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Pie de Página (Footer Cariñoso) -->
+<footer class="mt-auto px-6 py-8 text-center bg-gradient-to-b from-transparent via-night-900/80 to-night-950 border-t border-cyan-900/40 relative z-10">
+<div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-tr from-rose-500 via-amber-400 to-cyan-400 flex items-center justify-center text-xl shadow-glow-gold/40">
+        ❤️
+      </div>
+<h4 class="text-lg font-serif font-black text-white mb-1">
+        ¡Feliz Cumpleaños, Mamá!
+      </h4>
+<p class="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto mb-4">
+        Este viaje es solo una pequeña muestra de todo el amor, gratitud y admiración que sentimos por ti. ¡Prepárate para hacer las maletas! 🧳🌴☀️
+      </p>
+<div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-night-800/90 shadow-lg border border-cyan-500/40 text-xs font-bold text-cyan-300">
+<span class="">🏝️</span> Próxima parada: ¡El Paraíso! <span class="">🌊</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-6 font-medium">
+        Hecho con amor y emoción para el mejor cumpleaños de mamá 💖
+      </p>
+</footer>
+</div>
+<!-- Fin Contenedor Sorpresa -->
+</div>
+<!-- Interactive JavaScript Logic -->
+<script>
+    function launchCelebrationEffects(count = 55) {
+      const overlay = document.getElementById('celebrationOverlay');
+      const colors = ['#f59e0b', '#06b6d4', '#ec4899', '#10b981', '#fbbf24', '#38bdf8', '#f43f5e', '#a855f7'];
+      const shapes = ['rounded-full', 'rounded-sm', 'rotate-45'];
+
+      // Launch Confetti
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        const size = Math.floor(Math.random() * 9) + 6;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        
+        confetti.style.width = size + 'px';
+        confetti.style.height = (size * (Math.random() > 0.5 ? 1.4 : 1)) + 'px';
+        confetti.style.backgroundColor = color;
+        confetti.style.borderRadius = shape === 'rounded-full' ? '9999px' : (shape === 'rounded-sm' ? '2px' : '0');
+        confetti.style.left = (Math.random() * 100) + 'vw';
+        confetti.style.top = '-20px';
+        confetti.style.opacity = Math.random() * 0.7 + 0.3;
+        confetti.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        confetti.style.transition = 'transform 3.5s cubic-bezier(0.25, 1, 0.5, 1), top 3.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 3.5s ease-out';
+        
+        overlay.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.style.top = (window.innerHeight + 50) + 'px';
+          confetti.style.transform = 'rotate(' + (Math.random() * 720) + 'deg) translateX(' + (Math.random() * 120 - 60) + 'px)';
+          confetti.style.opacity = '0';
+        }, 30);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, 3800);
+      }
+
+      // Launch Floating Balloons
+      const balloonEmojis = ['🎈', '🎉', '✨', '💖', '🌴', '☀️', '🥂', '✈️'];
+      for (let j = 0; j < 14; j++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon-item';
+        balloon.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+        balloon.style.fontSize = (Math.random() * 20 + 24) + 'px';
+        balloon.style.left = (Math.random() * 90 + 5) + 'vw';
+        balloon.style.animationDelay = (Math.random() * 0.8) + 's';
+        overlay.appendChild(balloon);
+
+        setTimeout(() => {
+          balloon.remove();
+        }, 6000);
+      }
+    }
+
+    function revealSurprise() {
+      const fullContent = document.getElementById('fullSurpriseContent');
+      const heroSection = document.getElementById('heroHeaderSection');
+      const btn = document.getElementById('openGiftBtn');
+      const tapNotice = document.getElementById('tapNotice');
+      
+      // Ajustar espaciado del hero para acomodar el flujo completo
+      if (heroSection) {
+        heroSection.classList.remove('min-h-[75vh]', 'flex-1');
+      }
+
+      // Disparar gran explosión festiva de confeti y globos
+      launchCelebrationEffects(70);
+
+      // Desvelar contenido completo con animación suave
+      fullContent.classList.remove('hidden');
+      fullContent.classList.add('animate-reveal-flow');
+
+      // Actualizar botón a estado de éxito y celebración
+      btn.classList.remove('animate-pulse-glow');
+      btn.innerHTML = `
+        <div class="bg-gradient-to-r from-emerald-500 via-teal-600 to-caribbean-600 rounded-2xl py-3.5 px-6 text-white font-bold flex items-center justify-center gap-2 shadow-lg">
+          <span class="text-xl">🎉</span>
+          <span class="text-sm font-extrabold uppercase tracking-wide">¡Sorpresa Abierta! 🎉</span>
+          <span class="text-lg">💖</span>
+        </div>
+      `;
+      if (tapNotice) {
+        tapNotice.innerHTML = `<span>✨</span> ¡Que disfrutes tu viaje soñado! <span>🌴</span>`;
+      }
+      btn.onclick = () => {
+        launchCelebrationEffects(35);
+      };
+
+      // Desplazamiento suave hacia la revelación de San Andrés
+      setTimeout(() => {
+        const surpriseEl = document.getElementById('surpriseSection');
+        if (surpriseEl) {
+          surpriseEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+  </script>
+</body></html>
